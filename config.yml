@@ -1,0 +1,36 @@
+- hosts: all
+  become: true
+  pre_tasks:
+#  - name: update repository index (CentOS)
+ #   tags: always
+  #  dnf:
+   #   update_cache: yes
+    #changed_when: false
+   # when: ansible_distribution == "CentOS"
+
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "Ubuntu"
+  
+  - name: motd player
+    copy: 
+        content: "Ansible Managed by Valenzuela\n"
+        dest: /etc/motd
+
+
+ # - name: turn on httpd service
+  #  tags: apache, centos, httpd
+   # service:
+    # name: httpd
+    # state: started
+   # when: ansible_distribution == "CentOS"
+
+- hosts: all
+  become: true
+  roles:
+      - Prometheus
+      - apache2
+
